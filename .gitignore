@@ -4,3 +4,10 @@ obj/
 .vs/
 .vscode/
 *.log
+
+# Terraform — dados reais de infra (subnets, backend de state) nunca vão pro público
+terraform/**/backend.hcl
+terraform/**/*.secrets.tfvars
+terraform/**/.terraform/
+*.tfstate
+*.tfstate.*

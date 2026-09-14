@@ -1,0 +1,5 @@
+# Copie pra backend.hcl (gitignored) com o bucket/key reais, ou use o arquivo
+# equivalente mantido no repositório privado twila-terraform — ver README.md.
+bucket = "<tfstate-bucket-real>"
+key    = "mcp-http/staging/terraform.tfstate"
+region = "us-east-1"
