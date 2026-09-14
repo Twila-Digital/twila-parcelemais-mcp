@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Parcelemais.Mcp.Http/Parcelemais.Mcp.Http.csproj" />
+    <Project Path="src/Parcelemais.Mcp.Stdio/Parcelemais.Mcp.Stdio.csproj" />
+    <Project Path="src/Parcelemais.Mcp.Tools/Parcelemais.Mcp.Tools.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Parcelemais.Mcp.Tests/Parcelemais.Mcp.Tests.csproj" />
+  </Folder>
+</Solution>
