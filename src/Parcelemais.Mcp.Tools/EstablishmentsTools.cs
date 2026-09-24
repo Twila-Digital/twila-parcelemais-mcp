@@ -8,7 +8,7 @@ namespace Parcelemais.Mcp.Tools;
 [McpServerToolType]
 public sealed class EstablishmentsTools
 {
-    [McpServerTool(Name = "createEstablishment"), Description("Cadastra uma loja na rede do parceiro. Retorna o id da loja criada.")]
+    [McpServerTool(Name = "createEstablishment"), Description("Cadastra uma loja na rede do parceiro. O endereço é obrigatório (logradouro, número, bairro, cidade, UF e CEP); só o complemento é opcional. Retorna o id da loja criada.")]
     public static async Task<string> CreateEstablishment(
         IParceleMaisClientAccessor accessor,
         [Description("CNPJ da loja, só números.")] string document,
@@ -26,22 +26,19 @@ public sealed class EstablishmentsTools
         [Description("Dígito da agência, se houver.")] string? agencyDigit,
         [Description("Nome do titular da conta — obrigatório quando o modelo de desembolso é External.")] string? holderName,
         [Description("CPF/CNPJ do titular da conta — obrigatório quando o modelo de desembolso é External.")] string? holderDocument,
-        [Description("Logradouro da loja. Informe o endereço completo ou deixe todos os campos de endereço vazios pra cadastrar sem endereço.")] string? street,
-        [Description("Número do endereço.")] string? number,
-        [Description("Bairro.")] string? neighborhood,
-        [Description("Cidade.")] string? city,
-        [Description("UF (2 letras).")] string? state,
-        [Description("CEP, só números.")] string? postalCode,
+        [Description("Logradouro da loja.")] string street,
+        [Description("Número do endereço.")] string number,
+        [Description("Bairro.")] string neighborhood,
+        [Description("Cidade.")] string city,
+        [Description("UF (2 letras).")] string state,
+        [Description("CEP, só números.")] string postalCode,
         [Description("Complemento do endereço, se houver.")] string? complement,
         CancellationToken cancellationToken)
     {
         var client = await accessor.GetClientAsync(cancellationToken);
         try
         {
-            var address = string.IsNullOrWhiteSpace(street)
-                ? null
-                : new EstablishmentAddress(street!, number ?? string.Empty, neighborhood ?? string.Empty, city ?? string.Empty,
-                    state ?? string.Empty, postalCode ?? string.Empty, complement);
+            var address = new EstablishmentAddress(street, number, neighborhood, city, state, postalCode, complement);
 
             var result = await client.Establishments.CreateAsync(new CreateEstablishmentRequest(
                 Document: document,

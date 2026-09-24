@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="ModelContextProtocol" Version="2.2.0" />
-    <PackageReference Include="Twila.ParceleMais" Version="1.0.1" />
+    <PackageReference Include="Twila.ParceleMais" Version="2.0.0" />
   </ItemGroup>
 
 </Project>

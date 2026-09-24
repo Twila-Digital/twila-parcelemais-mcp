@@ -67,6 +67,14 @@ internal static class ToolTextFormatting
     public static string Format(Webhook webhook) =>
         $"{webhook.Type} → {webhook.Url} (autenticação: {webhook.AuthenticationType})";
 
+    public static string Format(WebhookAudit audit) => string.Join("\n",
+        $"Envio {audit.Id}",
+        $"Tipo: {audit.Type}",
+        $"Status HTTP: {audit.StatusCode}",
+        $"Data: {audit.CreatedAt}",
+        $"Requisição: {(string.IsNullOrWhiteSpace(audit.Request) ? "—" : audit.Request)}",
+        $"Resposta: {(string.IsNullOrWhiteSpace(audit.Response) ? "—" : audit.Response)}");
+
     /// <summary>
     /// Converte qualquer exceção do SDK numa <see cref="McpException"/> com mensagem legível,
     /// pra que o cliente MCP veja um erro de ferramenta normal em vez de uma falha não tratada.
