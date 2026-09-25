@@ -46,6 +46,42 @@ public sealed class WebhooksTools
         }
     }
 
+    [McpServerTool(Name = "listWebhookAudit"), Description("Lista o histórico de envios de webhook ao seu endpoint (mais recente primeiro), uma entrada por tentativa, com requisição, resposta e status HTTP. Use statusCode pra achar envios que falharam.")]
+    public static async Task<string> ListWebhookAudit(
+        IParceleMaisClientAccessor accessor,
+        [Description("Data inicial do filtro por período.")] DateTimeOffset? startDate,
+        [Description("Data final do filtro por período.")] DateTimeOffset? endDate,
+        [Description("Filtra pelo id do pedido (GUID).")] Guid? orderId,
+        [Description("Filtra pelo número do pedido.")] long? orderNumber,
+        [Description("Filtra pelo status HTTP retornado pelo seu endpoint (ex.: 500).")] int? statusCode,
+        [Description("Página (a partir de 1).")] int page,
+        [Description("Tamanho da página (padrão 10, máximo 100).")] int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var client = await accessor.GetClientAsync(cancellationToken);
+        try
+        {
+            var result = await client.Webhooks.ListAuditAsync(new ListWebhookAuditRequest(
+                StartDate: startDate,
+                EndDate: endDate,
+                OrderId: orderId,
+                OrderNumber: orderNumber,
+                StatusCode: statusCode,
+                Page: page <= 0 ? 1 : page,
+                PageSize: pageSize <= 0 ? 10 : pageSize), cancellationToken);
+
+            if (result.Items.Count == 0) return "Nenhum envio de webhook encontrado.";
+
+            var blocks = result.Items.Select((a, i) => $"{i + 1}. {ToolTextFormatting.Format(a)}");
+            var pagina = $"\n\nPágina {result.PageNumber} de {Math.Max(1, (int)Math.Ceiling(result.TotalCount / (double)result.PageSize))} ({result.TotalCount} no total, {(result.HasNext ? "há mais páginas" : "última página")}).";
+            return string.Join("\n\n", blocks) + pagina;
+        }
+        catch (ParceleMaisException ex)
+        {
+            throw ex.ToMcpException();
+        }
+    }
+
     [McpServerTool(Name = "updateWebhook"), Description("Atualiza a URL/autenticação do webhook de um tipo específico (um webhook por tipo).")]
     public static async Task<string> UpdateWebhook(
         IParceleMaisClientAccessor accessor,

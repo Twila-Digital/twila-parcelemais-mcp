@@ -116,7 +116,7 @@ Nomes exatos das tools são os registrados no código (`src/Parcelemais.Mcp.Tool
 | Pedidos (Orders) | `createOrder`, `getOrder`, `listOrders`, `startCdcSale`, `importOrderInvoice` |
 | Simulações | `simulateInstallments`, `simulateValues` |
 | Clientes | `getCustomer`, `listCustomers` |
-| Webhooks | `createWebhook`, `listWebhooks`, `updateWebhook`, `deleteWebhook` |
+| Webhooks | `createWebhook`, `listWebhooks`, `listWebhookAudit`, `updateWebhook`, `deleteWebhook` |
 
 **Notas importantes de negócio, refletidas nas ferramentas:**
 - Valores são sempre em reais (`1500.00`), não centavos.
@@ -130,6 +130,7 @@ Nomes exatos das tools são os registrados no código (`src/Parcelemais.Mcp.Tool
 - Pedido: *"Crie um pedido pro cliente João Silva (CPF 12345678900) no valor de R$ 1.500 e me dê o link de pagamento assim que aprovado."*
 - Conferir vendas: *"Liste os pedidos aprovados dos últimos 7 dias."*
 - Webhook: *"Cadastre um webhook de pedidos apontando pra https://meusite.com/webhooks/parcelemais."*
+- Auditoria de webhook: *"Liste os envios de webhook que falharam com status 500 hoje."*
 
 ---
 

@@ -2,6 +2,7 @@ using System.Globalization;
 using ModelContextProtocol;
 using ParceleMais.Customers.Models;
 using ParceleMais.Errors;
+using ParceleMais.Establishments.Models;
 using ParceleMais.Orders.Models;
 using ParceleMais.Webhooks.Models;
 
@@ -44,8 +45,35 @@ internal static class ToolTextFormatting
         return string.Join("\n", lines);
     }
 
+    public static string Format(Establishment establishment)
+    {
+        var lines = new List<string>
+        {
+            $"Loja {establishment.EstablishmentId}",
+            $"Razão social: {establishment.LegalName}",
+            $"Nome fantasia: {establishment.TradeName}",
+            $"CNPJ: {establishment.Document}",
+            $"Situação: {(establishment.IsActive ? "ativa" : "inativa")}",
+            $"Responsável: {establishment.Owner.Name} — {establishment.Owner.Email} — {establishment.Owner.Phone}",
+        };
+        if (establishment.DisbursementModel is { } disbursementModel) lines.Add($"Modelo de desembolso: {disbursementModel}");
+        if (establishment.BankAccount is { } bankAccount)
+            lines.Add($"Conta bancária: banco {bankAccount.BankNumber}, agência {bankAccount.AgencyNumber}{(string.IsNullOrWhiteSpace(bankAccount.AgencyDigit) ? "" : $"-{bankAccount.AgencyDigit}")}, conta {bankAccount.AccountNumber}-{bankAccount.AccountDigit} ({bankAccount.AccountType})");
+        if (establishment.Address is { } address)
+            lines.Add($"Endereço: {address.Street}, {address.Number}{(string.IsNullOrWhiteSpace(address.Complement) ? "" : $" — {address.Complement}")} — {address.District} — {address.City}/{address.State} — {address.ZipCode}");
+        return string.Join("\n", lines);
+    }
+
     public static string Format(Webhook webhook) =>
         $"{webhook.Type} → {webhook.Url} (autenticação: {webhook.AuthenticationType})";
+
+    public static string Format(WebhookAudit audit) => string.Join("\n",
+        $"Envio {audit.Id}",
+        $"Tipo: {audit.Type}",
+        $"Status HTTP: {audit.StatusCode}",
+        $"Data: {audit.CreatedAt}",
+        $"Requisição: {(string.IsNullOrWhiteSpace(audit.Request) ? "—" : audit.Request)}",
+        $"Resposta: {(string.IsNullOrWhiteSpace(audit.Response) ? "—" : audit.Response)}");
 
     /// <summary>
     /// Converte qualquer exceção do SDK numa <see cref="McpException"/> com mensagem legível,

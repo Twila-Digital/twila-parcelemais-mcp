@@ -41,6 +41,7 @@ builder.Services.AddMcpServer()
     .WithTools<OrdersTools>()
     .WithTools<SimulationsTools>()
     .WithTools<CustomersTools>()
+    .WithTools<EstablishmentsTools>()
     .WithTools<WebhooksTools>();
 
 builder.Logging.AddConsole(options =>
