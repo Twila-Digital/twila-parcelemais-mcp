@@ -116,12 +116,15 @@ Nomes exatos das tools são os registrados no código (`src/Parcelemais.Mcp.Tool
 | Pedidos (Orders) | `createOrder`, `getOrder`, `listOrders`, `startCdcSale`, `importOrderInvoice` |
 | Simulações | `simulateInstallments`, `simulateValues` |
 | Clientes | `getCustomer`, `listCustomers` |
+| Lojas da rede (Establishments) | `createEstablishment`, `getEstablishment`, `listEstablishments`, `updateEstablishment`, `updateEstablishmentBankAccount`, `activateEstablishment`, `deactivateEstablishment` |
 | Webhooks | `createWebhook`, `listWebhooks`, `updateWebhook`, `deleteWebhook` |
 
 **Notas importantes de negócio, refletidas nas ferramentas:**
 - Valores são sempre em reais (`1500.00`), não centavos.
 - `startCdcSale` só faz sentido com o pedido `Approved` — chamar antes disso retorna erro da API.
 - `createWebhook` retorna a chave de assinatura **uma única vez** — guarde-a com segurança pra validar eventos recebidos.
+- `updateEstablishment` não altera a razão social nem a conta bancária — pra trocar a conta use `updateEstablishmentBankAccount` (substitui a conta inteira). Loja inativa não aceita novos pedidos.
+- No modelo de desembolso `External`, nome e CPF/CNPJ do titular da conta são obrigatórios.
 - `updateWebhook`/`deleteWebhook` são por tipo (`Customer`/`Simulation`/`Order`) — só existe um webhook cadastrado por tipo.
 
 ## Ideias de prompts
@@ -129,6 +132,7 @@ Nomes exatos das tools são os registrados no código (`src/Parcelemais.Mcp.Tool
 - Simulação: *"Simule as parcelas de um valor de R$ 1.500 pro Parcele+."*
 - Pedido: *"Crie um pedido pro cliente João Silva (CPF 12345678900) no valor de R$ 1.500 e me dê o link de pagamento assim que aprovado."*
 - Conferir vendas: *"Liste os pedidos aprovados dos últimos 7 dias."*
+- Lojas: *"Liste as lojas ativas da minha rede."*
 - Webhook: *"Cadastre um webhook de pedidos apontando pra https://meusite.com/webhooks/parcelemais."*
 
 ---

@@ -40,6 +40,7 @@ builder.Services.AddMcpServer()
     .WithTools<OrdersTools>()
     .WithTools<SimulationsTools>()
     .WithTools<CustomersTools>()
+    .WithTools<EstablishmentsTools>()
     .WithTools<WebhooksTools>();
 
 var app = builder.Build();
